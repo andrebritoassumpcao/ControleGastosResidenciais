@@ -14,7 +14,8 @@ namespace ControleGastosResidenciais.Application.Validators
 
             this.RuleFor(request => request.Age)
                .NotEmpty()
-               .WithMessage(Resource.EmptyNameError);
+               .GreaterThan(0)
+               .WithMessage(Resource.EmptyAgeError);
         }
     }
 }

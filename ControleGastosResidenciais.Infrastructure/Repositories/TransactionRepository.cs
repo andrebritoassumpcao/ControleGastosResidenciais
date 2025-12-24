@@ -31,4 +31,17 @@ public class TransactionRepository(AppDbContext context) : ITransactionRepositor
         await context.Transactions.AddAsync(transaction);
         await context.SaveChangesAsync();
     }
+
+    public async Task<bool> DescriptionAlreadyExistis(string description)
+    {
+        var result = await context.Transactions
+            .FirstOrDefaultAsync(p => p.Description == description);
+
+        if (result is not null)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

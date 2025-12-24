@@ -1,5 +1,8 @@
 ﻿using Asp.Versioning;
+using ControleGastosResidenciais.Application.Common.Resources;
 using ControleGastosResidenciais.Application.DTOs.Categories;
+using ControleGastosResidenciais.Application.Exceptions;
+using ControleGastosResidenciais.Application.Services;
 using ControleGastosResidenciais.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -42,5 +45,28 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
         logger.LogInformation($"Retornando {result.Count()} categorias");
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Busca uma categoria por ID.
+    /// </summary>
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        try
+        {
+            var result = await categoryService.GetByIdAsync(id);
+            return Ok(result);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { errors = ex.Errors });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Erro ao buscar pessoa");
+            return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+        }
     }
 }

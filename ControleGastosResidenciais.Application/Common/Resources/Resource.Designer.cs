@@ -97,7 +97,7 @@ namespace ControleGastosResidenciais.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to O campo Idade não pode ser nulo. .
+        ///   Looks up a localized string similar to O campo Idade deve ser maior que zero. .
         /// </summary>
         public static string EmptyAgeError {
             get {

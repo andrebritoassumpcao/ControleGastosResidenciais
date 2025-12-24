@@ -57,7 +57,7 @@ public class PersonService(
 
         if (person is null)
         {
-            throw new NotFoundException(Resource.PersonNotFoundCode, Resource.PersonNotFoundCode);
+            throw new NotFoundException(Resource.PersonNotFoundCode, Resource.PersonNotFound);
         }
         var result = adapter.ToPersonResponseDto(person);
 

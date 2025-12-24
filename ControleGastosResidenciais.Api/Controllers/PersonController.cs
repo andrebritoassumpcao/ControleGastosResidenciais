@@ -18,7 +18,9 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
     /// Cria uma nova pessoa.
     /// </summary>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PersonRequestDto))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(PersonResponseDto))]
 
     public async Task<IActionResult> Create([FromBody] PersonRequestDto personDto)
     {
@@ -42,7 +44,9 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
     /// Lista todas as pessoas.
     /// </summary>
     [HttpGet]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(PersonResponseDto))]
 
     public async Task<IActionResult> GetAll()
     {
@@ -54,7 +58,7 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
         catch (Exception ex)
         {
             logger.LogError(ex, "Erro ao listar pessoas");
-            return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
         }
     }
 
@@ -62,8 +66,10 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
     /// Busca uma pessoa por ID.
     /// </summary>
     [HttpGet("{id:guid}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
-
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(PersonResponseDto))]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -78,7 +84,7 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
         catch (Exception ex)
         {
             logger.LogError(ex, "Erro ao buscar pessoa");
-            return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
         }
     }
 
@@ -86,7 +92,9 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
     /// Deleta uma pessoa.
     /// </summary>
     [HttpDelete("{id:guid}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PersonResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(PersonResponseDto))]
     public async Task<IActionResult> Delete(Guid id)
     {
         try
@@ -101,7 +109,7 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
         catch (Exception ex)
         {
             logger.LogError(ex, "Erro ao deletar pessoa");
-            return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using ControleGastosResidenciais.Application.Common.Adapter.Interface;
+using ControleGastosResidenciais.Application.Common.Resources;
 using ControleGastosResidenciais.Application.DTOs.Categories;
+using ControleGastosResidenciais.Application.DTOs.Transactions;
+using ControleGastosResidenciais.Application.Exceptions;
 using ControleGastosResidenciais.Application.Services.Interfaces;
 using ControleGastosResidenciais.Domain.Interfaces.Repositories;
 using FluentValidation;
@@ -48,5 +51,17 @@ public class CategoryService(
             .ToList();
 
         return result;
+    }
+    /// <summary>
+    /// Busca categoria pelo id.
+    /// </summary>
+    public async Task<CategoryResponseDto> GetByIdAsync(Guid id)
+    {
+        var result = await categoryRepository.GetCategoryByIdAsync(id);
+
+        if (result is null)
+            throw new ValidatorException(Resource.TransactionInvalidCategoryCode, Resource.TransactionNotFound);
+
+        return adapter.ToCategoryResponseDto(result);
     }
 }

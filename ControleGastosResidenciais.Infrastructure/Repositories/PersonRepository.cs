@@ -40,4 +40,17 @@ public class PersonRepository(AppDbContext context) : IPersonRepository
 
         return person.Id;
     }
+
+    public async Task<bool> NameAlreadyExistis(string name)
+    {
+        var result = await context.Persons
+            .FirstOrDefaultAsync(p => p.Name == name);
+
+        if(result is not null)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

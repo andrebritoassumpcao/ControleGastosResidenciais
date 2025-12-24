@@ -9,7 +9,11 @@ using System;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.SQLite(
+        sqliteDbPath: "controle_gastos.db",
+        tableName: "Logs",
+        storeTimestampInUtc: true
+    )
     .CreateLogger();
 
 try

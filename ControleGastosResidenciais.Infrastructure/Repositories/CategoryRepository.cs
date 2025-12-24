@@ -30,12 +30,24 @@ namespace ControleGastosResidenciais.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<Category?> GetCategoryByIdAsync(Guid id)
+        public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
-            var result = await context .Categories
+            var result = await context.Categories
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            return result;
+            return result!;
+        }
+        public async Task<bool> DescriptionAlreadyExistis(string description)
+        {
+            var result = await context.Categories
+                .FirstOrDefaultAsync(p => p.Description == description);
+
+            if (result is not null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

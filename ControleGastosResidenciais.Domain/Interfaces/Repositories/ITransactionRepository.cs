@@ -12,5 +12,6 @@ namespace ControleGastosResidenciais.Domain.Interfaces.Repositories
         Task<Transaction> GetTransactionByIdAsync(Guid id);
         Task<IEnumerable<Transaction>> GetAllTransactionsAsync();
         Task CreateTransactionAsync(Transaction transaction);
+        Task<bool> DescriptionAlreadyExistis(string description);
     }
 }

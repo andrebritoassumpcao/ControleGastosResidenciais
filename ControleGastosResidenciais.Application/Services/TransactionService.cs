@@ -58,7 +58,7 @@ public class TransactionService(
         return transactions.Select(adapter.ToTransactionResponseDto).ToList();
     }
 
-    public async Task<TransactionResponseDto> GetByIdlAsync(Guid id)
+    public async Task<TransactionResponseDto> GetByIdAsync(Guid id)
     {
         var result = await transactionRepository.GetTransactionByIdAsync(id);
 

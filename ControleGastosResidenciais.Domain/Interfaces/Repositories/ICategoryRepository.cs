@@ -6,5 +6,6 @@ public interface ICategoryRepository
 {
     Task CreateCategoryAsync(Category category);
     Task<IEnumerable<Category>> GetAllCategoriesAsync();
-    Task<Category?> GetCategoryByIdAsync(Guid id);
+    Task<Category> GetCategoryByIdAsync(Guid id);
+    Task<bool> DescriptionAlreadyExistis(string description);
 }

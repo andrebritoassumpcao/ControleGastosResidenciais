@@ -124,7 +124,7 @@
     <value>Pessoa não encontrada</value>
   </data>
   <data name="EmptyAgeError" xml:space="preserve">
-    <value>O campo Idade não pode ser nulo. </value>
+    <value>O campo Idade deve ser maior que zero. </value>
   </data>
   <data name="EmptyNameError" xml:space="preserve">
     <value>O campo Nome não pode ser nulo.</value>

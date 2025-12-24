@@ -13,6 +13,7 @@ namespace ControleGastosResidenciais.Domain.Interfaces.Repositories
         Task<IEnumerable<Person>> GetAllPersonsAsync();
         Task CreatePersonAsync(Person person);
         Task<Guid> DeletePersonAsync(Person person);
+        Task<bool> NameAlreadyExistis(string name);
 
     }
 }
