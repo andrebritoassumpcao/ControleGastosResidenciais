@@ -180,4 +180,22 @@
   <data name="EmptyCategoryIdError" xml:space="preserve">
     <value>O id da categoria é obrigatório.</value>
   </data>
+  <data name="PersonAlreadyExistsCode" xml:space="preserve">
+    <value>PERSON_ALREADY_EXISTS</value>
+  </data>
+  <data name="PersonAlreadyExists" xml:space="preserve">
+    <value>O nome da pessoa já encontra-se cadastrado em nossa base.</value>
+  </data>
+  <data name="CategoryAlreadyExistisCode" xml:space="preserve">
+    <value>CATEGORY_ALREADY_EXISTIS</value>
+  </data>
+  <data name="CategoryAlreadyExistis" xml:space="preserve">
+    <value>A descrição dessa categoria já encontra-se cadastrada em nossa base.</value>
+  </data>
+  <data name="TransactionAlreadyExistisCode" xml:space="preserve">
+    <value>TRANSACTION_ALREADY_EXISTIS</value>
+  </data>
+  <data name="TransactionAlreadyExistis" xml:space="preserve">
+    <value>A descrição dessa transação já encontra-se cadastrada em nossa base.</value>
+  </data>
 </root>

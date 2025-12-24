@@ -30,6 +30,12 @@ public class CategoryService(
             throw new ValidationException(errors);
         }
 
+        bool categoryExists = await categoryRepository.DescriptionAlreadyExistis(categoryDto.Description);
+        if (categoryExists)
+        {
+            throw new ValidatorException(Resource.CategoryAlreadyExistisCode, Resource.CategoryAlreadyExistis);
+        }
+
         var category = adapter.ToCategory(categoryDto);
 
         await categoryRepository.CreateCategoryAsync(category);

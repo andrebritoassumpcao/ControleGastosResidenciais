@@ -33,10 +33,15 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
         {
             return BadRequest(new { errors = ex.Errors });
         }
+        catch (ValidatorException ex)
+        {
+            logger.LogError(ex, "Erro de validação ao criar pessoa");
+            return StatusCode((int)HttpStatusCode.BadRequest, new { errors = ex.Errors });
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Erro ao criar pessoa");
-            return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
         }
     }
 
@@ -48,7 +53,7 @@ public class PersonController(IPersonService personService, ILogger<PersonContro
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PersonResponseDto))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(PersonResponseDto))]
 
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
         try
         {

@@ -61,6 +61,24 @@ namespace ControleGastosResidenciais.Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A descrição dessa categoria já encontra-se cadastrada em nossa base..
+        /// </summary>
+        public static string CategoryAlreadyExistis {
+            get {
+                return ResourceManager.GetString("CategoryAlreadyExistis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CATEGORY_ALREADY_EXISTIS.
+        /// </summary>
+        public static string CategoryAlreadyExistisCode {
+            get {
+                return ResourceManager.GetString("CategoryAlreadyExistisCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Categoria não encontrada..
         /// </summary>
         public static string CategoryNotFound {
@@ -160,6 +178,24 @@ namespace ControleGastosResidenciais.Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O nome da pessoa já encontra-se cadastrado em nossa base..
+        /// </summary>
+        public static string PersonAlreadyExists {
+            get {
+                return ResourceManager.GetString("PersonAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PERSON_ALREADY_EXISTS.
+        /// </summary>
+        public static string PersonAlreadyExistsCode {
+            get {
+                return ResourceManager.GetString("PersonAlreadyExistsCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pessoa não encontrada.
         /// </summary>
         public static string PersonNotFound {
@@ -183,6 +219,24 @@ namespace ControleGastosResidenciais.Application.Common.Resources {
         public static string PurposeError {
             get {
                 return ResourceManager.GetString("PurposeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A descrição dessa transação já encontra-se cadastrada em nossa base..
+        /// </summary>
+        public static string TransactionAlreadyExistis {
+            get {
+                return ResourceManager.GetString("TransactionAlreadyExistis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TRANSACTION_ALREADY_EXISTIS.
+        /// </summary>
+        public static string TransactionAlreadyExistisCode {
+            get {
+                return ResourceManager.GetString("TransactionAlreadyExistisCode", resourceCulture);
             }
         }
         

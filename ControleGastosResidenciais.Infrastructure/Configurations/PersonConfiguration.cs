@@ -19,7 +19,7 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
         builder.Property(p => p.Name)
             .HasColumnName("name")
             .IsRequired()
-            .HasMaxLength(200);
+            .HasMaxLength(100);
 
         builder.Property(p => p.Age)
             .HasColumnName("age")

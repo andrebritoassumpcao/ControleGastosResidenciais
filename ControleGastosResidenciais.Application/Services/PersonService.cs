@@ -18,18 +18,24 @@ public class PersonService(
     /// <summary>
     /// Cria uma nova pessoa após validar os dados.
     /// </summary>
-    public async Task<PersonResponseDto> CreateAsync(PersonRequestDto dto)
+    public async Task<PersonResponseDto> CreateAsync(PersonRequestDto personDto)
     {
-        logger.LogInformation("Criando pessoa: {Name}", dto.Name);
+        logger.LogInformation("Criando pessoa: {Name}", personDto.Name);
 
-        var validationResult = await validator.ValidateAsync(dto);
+        var validationResult = await validator.ValidateAsync(personDto);
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors;
             throw new ValidationException(errors);
         }
 
-        var person = adapter.ToPerson(dto);
+        bool personExists = await personRepository.NameAlreadyExistis(personDto.Name);
+        if (personExists)
+        {
+            throw new ValidatorException(Resource.PersonAlreadyExistsCode, Resource.PersonAlreadyExists);
+        }
+
+        var person = adapter.ToPerson(personDto);
 
         await personRepository.CreatePersonAsync(person);
 

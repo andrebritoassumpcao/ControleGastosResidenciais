@@ -2,7 +2,9 @@
 using ControleGastosResidenciais.Application.Common.Resources;
 using ControleGastosResidenciais.Application.DTOs.Transactions;
 using ControleGastosResidenciais.Application.Exceptions;
+using ControleGastosResidenciais.Application.Services;
 using ControleGastosResidenciais.Application.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -22,13 +24,28 @@ namespace ControleGastosResidenciais.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Create([FromBody] TransactionRequestDto transactionDto)
         {
-            logger.LogInformation("Recebendo requisição para criar transação: {Description}", transactionDto.Description);
+            try
+            {
+                var result = await transactionService.CreateAsync(transactionDto);
 
-            var result = await transactionService.CreateAsync(transactionDto);
+                logger.LogInformation("Transação criada com sucesso: {Id}", result.Id);
 
-            logger.LogInformation("Transação criada com sucesso: {Id}", result.Id);
-
-            return CreatedAtAction(nameof(GetAll), new { id = result.Id }, result);
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { errors = ex.Errors });
+            }
+            catch (ValidatorException ex)
+            {
+                logger.LogError(ex, "Erro de validação ao criar transação");
+                return StatusCode((int)HttpStatusCode.BadRequest, new { errors = ex.Errors });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao criar transação");
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+            }
         }
 
         /// <summary>
@@ -40,13 +57,16 @@ namespace ControleGastosResidenciais.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(TransactionResponseDto))]
         public async Task<IActionResult> GetAll()
         {
-            logger.LogInformation("Recebendo requisição para buscar todas as transações");
-
-            var result = await transactionService.GetAllAsync();
-
-            logger.LogInformation($"Retornando {result.Count()} transações");
-
-            return Ok(result);
+            try
+            {
+                var result = await transactionService.GetAllAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao listar pessoas");
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+            }
         }
 
         /// <summary>

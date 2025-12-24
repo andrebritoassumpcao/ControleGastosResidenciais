@@ -1,9 +1,11 @@
 ﻿using Asp.Versioning;
 using ControleGastosResidenciais.Application.Common.Resources;
 using ControleGastosResidenciais.Application.DTOs.Categories;
+using ControleGastosResidenciais.Application.DTOs.Persons;
 using ControleGastosResidenciais.Application.Exceptions;
 using ControleGastosResidenciais.Application.Services;
 using ControleGastosResidenciais.Application.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -19,16 +21,31 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     /// </summary>
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(CategoryResponseDto))]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CategoryRequestDto categoryDto)
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(CategoryResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(CategoryResponseDto))]
+    public async Task<IActionResult> CreateAsync([FromBody] CategoryRequestDto categoryDto)
     {
-        logger.LogInformation("Recebendo requisição para criar categoria: {Description}", categoryDto.Description);
 
-        var result = await categoryService.CreateAsync(categoryDto);
 
-        logger.LogInformation("Categoria criada com sucesso: {Id}", result.Id);
-
-        return CreatedAtAction(nameof(GetAll), new { id = result.Id }, result);
+        try
+        {
+            var result = categoryService.CreateAsync(categoryDto);
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = result.Id }, result);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { errors = ex.Errors });
+        }
+        catch (ValidatorException ex)
+        {
+            logger.LogError(ex, "Erro de validação ao criar Categorias");
+            return StatusCode((int)HttpStatusCode.BadRequest, new { errors = ex.Errors });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Erro ao criar pessoa");
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+        }
     }
 
     /// <summary>
@@ -36,7 +53,9 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     /// </summary>
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<CategoryResponseDto>))]
-    public async Task<IActionResult> GetAll()
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(CategoryResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(CategoryResponseDto))]
+    public async Task<IActionResult> GetAllAsync()
     {
         logger.LogInformation("Recebendo requisição para buscar todas as categorias");
 
@@ -51,8 +70,10 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     /// Busca uma categoria por ID.
     /// </summary>
     [HttpGet("{id:guid}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
-    public async Task<IActionResult> GetById(Guid id)
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(CategoryResponseDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(CategoryResponseDto))]
+    public async Task<IActionResult> GetByIdAsync(Guid id)
     {
         try
         {
@@ -65,7 +86,7 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Erro ao buscar pessoa");
+            logger.LogError(ex, "Erro ao buscar categoria");
             return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
         }
     }

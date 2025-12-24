@@ -28,8 +28,14 @@ public class TransactionService(
         var validationResult = await validator.ValidateAsync(transactionDto);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
-        
+
         // 2º. Carregar entidades existentes para validação
+        bool transactionExists = await transactionRepository.DescriptionAlreadyExistis(transactionDto.Description);
+        if (transactionExists)
+        {
+            throw new ValidatorException(Resource.TransactionAlreadyExistisCode, Resource.TransactionAlreadyExistis);
+        }
+
         var personExists = await personRepository.GetPersonByIdAsync(transactionDto.PersonId)
                      ?? throw new NotFoundException(Resource.PersonNotFoundCode, Resource.PersonNotFound);
 

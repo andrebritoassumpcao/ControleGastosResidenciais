@@ -19,7 +19,7 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.Property(t => t.Description)
             .HasColumnName("description")
             .IsRequired()
-            .HasMaxLength(300);
+            .HasMaxLength(100);
 
         builder.Property(t => t.Value)
             .HasColumnName("value")
