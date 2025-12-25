@@ -25,6 +25,29 @@ public class TransactionRepository(AppDbContext context) : ITransactionRepositor
 
         return result;
     }
+    public async Task<IEnumerable<Transaction>> GetAllTransactionsByPersonIdAsync(Guid personId)
+    {
+        var result = await context.Transactions
+            .Include(t => t.Person)
+            .Include(t => t.Category)
+            .Where(t => t.PersonId == personId)
+            .ToListAsync();
+
+        return result;
+    }
+
+    public async Task<IEnumerable<Transaction>> GetAllTransactionsByCategoryIdAsync(Guid categoryId)
+    {
+        var result = await context.Transactions
+            .AsNoTracking()
+            .Include(t => t.Person)
+            .Include(t => t.Category)
+            .Where(t => t.CategoryId == categoryId)
+            .ToListAsync();
+
+        return result;
+
+    }
 
     public async Task CreateTransactionAsync(Transaction transaction)
     {

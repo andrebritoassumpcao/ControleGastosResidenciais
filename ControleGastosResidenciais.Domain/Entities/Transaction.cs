@@ -7,7 +7,7 @@ namespace ControleGastosResidenciais.Domain.Entities;
 public class Transaction
 {
     public Guid Id { get; set; }
-    public required string Description { get; set; }
+    public string Description { get; set; }
     public decimal Value { get; set; }
     public TransactionType Type { get; set; }
 
