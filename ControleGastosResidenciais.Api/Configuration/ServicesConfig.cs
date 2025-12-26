@@ -11,7 +11,8 @@ public static class ServicesConfig
     {
         services.AddScoped<IPersonService, PersonService>()
                 .AddScoped<ICategoryService, CategoryService>()
-                .AddScoped<ITransactionService, TransactionService>();
+                .AddScoped<ITransactionService, TransactionService>()
+                .AddScoped<ISummaryService, SummaryService>();
 
         return services;
     }

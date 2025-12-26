@@ -9,7 +9,9 @@ namespace ControleGastosResidenciais.Application.Services.Interfaces
 {
     public interface ISummaryService
     {
-        Task<SummaryByPersonResponseDto> GetSummaryByPersonAsync();
-        Task<SummaryByCategoryResponseDto> GetSummaryByCategoryAsync();
+        Task<SummaryByPersonDto> GetSummaryByPersonAsync(Guid personId);
+        Task<SummaryByPersonResponseDto> GetAllSummaryByPersonAsync();
+        Task<SummaryByCategoryDto> GetSummaryByCategoryAsync(Guid categoryId);
+        Task<SummaryByCategoryResponseDto> GetAllSummaryByCategoryAsync();
     }
 }

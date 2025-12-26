@@ -17,20 +17,18 @@ namespace ControleGastosResidenciais.Api.Controllers;
 public class CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger) : ControllerBase
 {
     /// <summary>
-    /// Cria uma nova pessoa.
+    /// Cria uma nova pessoa.x
     /// </summary>
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(CategoryResponseDto))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(CategoryResponseDto))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(CategoryResponseDto))]
-    public async Task<IActionResult> CreateAsync([FromBody] CategoryRequestDto categoryDto)
+    public async Task<IActionResult> Create([FromBody] CategoryRequestDto categoryDto)
     {
-
-
         try
         {
-            var result = categoryService.CreateAsync(categoryDto);
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = result.Id }, result);
+            var result = await categoryService.CreateAsync(categoryDto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
         catch (ValidationException ex)
         {
@@ -55,7 +53,7 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<CategoryResponseDto>))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(CategoryResponseDto))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(CategoryResponseDto))]
-    public async Task<IActionResult> GetAllAsync()
+    public async Task<IActionResult> GetAll()
     {
         logger.LogInformation("Recebendo requisição para buscar todas as categorias");
 
@@ -73,7 +71,7 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseDto))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(CategoryResponseDto))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(CategoryResponseDto))]
-    public async Task<IActionResult> GetByIdAsync(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {

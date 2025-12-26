@@ -39,7 +39,8 @@ try
                .AddRepositories()
                .AddScoped<IPersonAdapter, PersonAdapter>()
                .AddScoped<ICategoryAdapter, CategoryAdapter>()
-               .AddScoped<ITransactionAdapter, TransactionAdapter>();
+               .AddScoped<ITransactionAdapter, TransactionAdapter>()
+               .AddScoped<ISummaryAdapter, SummaryAdapter>();
 
     builder.Services.AddCors(options =>
     {
