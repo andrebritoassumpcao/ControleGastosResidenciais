@@ -70,4 +70,23 @@ public class CategoryService(
 
         return adapter.ToCategoryResponseDto(result);
     }
+
+    /// <summary>
+    /// Deleta a categoria e retorna o Id.
+    /// </summary>
+    public async Task<Guid> DeleteAsync(Guid id)
+    {
+        var person = await categoryRepository.GetCategoryByIdAsync(id);
+
+        if (person is null)
+        {
+            throw new NotFoundException(Resource.PersonNotFoundCode, Resource.PersonNotFoundCode);
+        }
+
+        await categoryRepository.DeleteCaregoryAsync(person);
+
+        logger.LogInformation("Pessoa deletada com sucesso: {Id}", id);
+
+        return person.Id;
+    }
 }

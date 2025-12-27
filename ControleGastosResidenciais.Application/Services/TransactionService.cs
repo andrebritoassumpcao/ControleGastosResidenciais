@@ -36,17 +36,17 @@ public class TransactionService(
             throw new ValidatorException(Resource.TransactionAlreadyExistisCode, Resource.TransactionAlreadyExistis);
         }
 
-        var personExists = await personRepository.GetPersonByIdAsync(transactionDto.PersonId)
+        var person = await personRepository.GetPersonByIdAsync(transactionDto.PersonId)
                      ?? throw new NotFoundException(Resource.PersonNotFoundCode, Resource.PersonNotFound);
 
-        var categoryExists = await categoryRepository.GetCategoryByIdAsync(transactionDto.CategoryId)
+        var category = await categoryRepository.GetCategoryByIdAsync(transactionDto.CategoryId)
                        ?? throw new NotFoundException(Resource.CategoryNotFoundCode, Resource.CategoryNotFound);
 
         // 3º Mapear dto para entidade
         var transaction = adapter.ToTransaction(transactionDto);
 
         // 4º. Implementar regras de negócio
-        ValidateNewTransaction(transaction);
+        ValidateNewTransaction(transaction,person.Age, category.Purpose);
 
         // 5º.Persistencia no banco de dados
         await transactionRepository.CreateTransactionAsync(transaction);
@@ -74,10 +74,10 @@ public class TransactionService(
         return adapter.ToTransactionResponseDto(result)!;
     }
 
-    private void ValidateNewTransaction(Transaction transaction)
+    private void ValidateNewTransaction(Transaction transaction, int pesonAge, CategoryPurpose categoryPurpose)
     {
         // Regra 1: menor de idade só pode ecolher TransactionType = Expenses(despesa)
-        if (transaction.Person.Age < 18 && transaction.Type == TransactionType.Income)
+        if (pesonAge < 18 && transaction.Type == TransactionType.Income)
         {
             throw new ValidatorException(
                 Resource.TransactionMinorIncomeNotAllowedCode,
@@ -86,7 +86,7 @@ public class TransactionService(
 
         // Regra 2: Não é possivel ter tipo e finalidade diferentes
         if (transaction.Type == TransactionType.Expense &&
-            transaction.Category.Purpose == CategoryPurpose.Income)
+            categoryPurpose == CategoryPurpose.Income)
         {
             throw new ValidatorException(
                 Resource.TransactionInvalidCategoryCode,
@@ -94,7 +94,7 @@ public class TransactionService(
         }
 
         if (transaction.Type == TransactionType.Income &&
-            transaction.Category.Purpose == CategoryPurpose.Expense)
+            categoryPurpose == CategoryPurpose.Expense)
         {
             throw new ValidatorException(
                 Resource.TransactionInvalidCategoryCode,

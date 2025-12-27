@@ -57,7 +57,7 @@ public class SummaryService(ITransactionRepository transactionRepository, IPerso
         {
             throw new NotFoundException(Resource.CategoryNotFoundCode, Resource.CategoryNotFound);
         }
-        var transactions = await transactionRepository.GetAllTransactionsByPersonIdAsync(categoryId);
+        var transactions = await transactionRepository.GetAllTransactionsByCategoryIdAsync(categoryId);
         // usar o adapter para converter a lista de transações em um SummaryByCategoryDto
         var result = adapter.ToSummaryByCategoryDto(transactions);
 
@@ -69,7 +69,7 @@ public class SummaryService(ITransactionRepository transactionRepository, IPerso
         var transactions = await transactionRepository.GetAllTransactionsAsync();
 
         var grouped = transactions
-             .GroupBy(t => t.PersonId)
+             .GroupBy(t => t.CategoryId)
              .Select(group => adapter.ToSummaryByCategoryDto(group))
              .OrderBy(x => x.Description)
              .ToList();
@@ -78,7 +78,7 @@ public class SummaryService(ITransactionRepository transactionRepository, IPerso
         {
             Items = grouped,
             TotalIncome = grouped.Sum(x => x.TotalIncome),
-            TotalExpense = grouped.Sum(x => x.TotalExpenses)
+            TotalExpense = grouped.Sum(x => x.TotalExpenses),
         };
 
         return response;

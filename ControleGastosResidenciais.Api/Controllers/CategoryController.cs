@@ -88,4 +88,29 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
             return StatusCode(500, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
         }
     }
+
+    /// <summary>
+    /// Deleta uma pessoa.
+    /// </summary>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(Guid))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(Guid))]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try
+        {
+            await categoryService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { errors = ex.Errors });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Erro ao deletar pessoa");
+            return StatusCode((int)HttpStatusCode.InternalServerError, new { errors = new[] { new ErrorMessage(Resource.InternalErrorCode, Resource.InternalError) } });
+        }
+    }
 }

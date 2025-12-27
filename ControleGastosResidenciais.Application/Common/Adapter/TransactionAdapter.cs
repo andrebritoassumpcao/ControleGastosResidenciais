@@ -24,6 +24,7 @@ public class TransactionAdapter : ITransactionAdapter
         CategoryId = transaction.CategoryId,
         PersonId = transaction.PersonId,
         Value = transaction.Value,
+        PersonName = transaction.Person.Name,
         Description = transaction.Description,
         Type = transaction.Type,
     };

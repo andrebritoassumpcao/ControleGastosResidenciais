@@ -12,5 +12,6 @@ namespace ControleGastosResidenciais.Application.Services.Interfaces
         Task<CategoryResponseDto> CreateAsync(CategoryRequestDto dto);
         Task<IEnumerable<CategoryResponseDto>> GetAllAsync();
         Task<CategoryResponseDto> GetByIdAsync(Guid id);
+        Task<Guid> DeleteAsync(Guid id);
     }
 }

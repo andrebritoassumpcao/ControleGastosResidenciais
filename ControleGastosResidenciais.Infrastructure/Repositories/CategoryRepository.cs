@@ -49,5 +49,13 @@ namespace ControleGastosResidenciais.Infrastructure.Repositories
 
             return false;
         }
+
+        public async Task<Guid> DeleteCaregoryAsync(Category category)
+        {
+            context.Categories.Remove(category);
+            await context.SaveChangesAsync();
+
+            return category.Id;
+        }
     }
 }

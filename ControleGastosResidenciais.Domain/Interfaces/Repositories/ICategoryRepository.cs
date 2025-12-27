@@ -8,4 +8,5 @@ public interface ICategoryRepository
     Task<IEnumerable<Category>> GetAllCategoriesAsync();
     Task<Category> GetCategoryByIdAsync(Guid id);
     Task<bool> DescriptionAlreadyExistis(string description);
+    Task<Guid> DeleteCaregoryAsync(Category category);
 }
