@@ -29,31 +29,24 @@ public class TransactionService(
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        // 2º. Carregar entidades existentes para validação
-        bool transactionExists = await transactionRepository.DescriptionAlreadyExistis(transactionDto.Description);
-        if (transactionExists)
-        {
-            throw new ValidatorException(Resource.TransactionAlreadyExistisCode, Resource.TransactionAlreadyExistis);
-        }
-
         var person = await personRepository.GetPersonByIdAsync(transactionDto.PersonId)
                      ?? throw new NotFoundException(Resource.PersonNotFoundCode, Resource.PersonNotFound);
 
         var category = await categoryRepository.GetCategoryByIdAsync(transactionDto.CategoryId)
                        ?? throw new NotFoundException(Resource.CategoryNotFoundCode, Resource.CategoryNotFound);
 
-        // 3º Mapear dto para entidade
+        // 2º Mapear dto para entidade
         var transaction = adapter.ToTransaction(transactionDto);
 
-        // 4º. Implementar regras de negócio
+        // 3º. Implementar regras de negócio
         ValidateNewTransaction(transaction,person.Age, category.Purpose);
 
-        // 5º.Persistencia no banco de dados
+        // 4º.Persistencia no banco de dados
         await transactionRepository.CreateTransactionAsync(transaction);
 
         logger.LogInformation("Transação criada com sucesso: {Id}", transaction.Id);
 
-        // 6. Retornar DTO como resposta
+        // 5. Retornar DTO como resposta
         var result = adapter.ToTransactionResponseDto(transaction);
         return result;
     }
