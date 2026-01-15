@@ -22,17 +22,10 @@ O **Sistema de Gerenciamento Financeiro** permite:
 - **.NET 9** 
 - **Entity Framework Core**
 - **SQLite**
-- **FluentValidation**
-- **Clean Architecture**
 
 ### Frontend
 - **React** com **TypeScript**
 - **Vite**
-- **Axios**
-- **shadcn/ui** 
-- **Tailwind CSS** 
-- **Sonner** 
-
 ---
 
 
